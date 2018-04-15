@@ -1,2 +1,17 @@
 Initial result
 {"exact_match": 66.92526017029329, "f1": 76.71434654414833}
+
+
+
+basic/cli - set all tensorflow runtime parameter
+basic/model - Overall model
+line 98 - 106: character level CNN
+line 117 - 121: word embedding using pre-train word vector
+line 158 - 169: contextual embedding layer
+line 172 - 189: Attention Flow layer
+
+
+my folder - customer tensorflow module for the purpose of this model
+
+Parameter:
+cluster - cluster different examples by their length
