@@ -162,11 +162,14 @@ class Model(object):
                 first_cell = d_cell
 
             (fw_g0, bw_g0), _ = bidirectional_dynamic_rnn(first_cell, first_cell, p0, x_len, dtype='float', scope='g0')  # [N, M, JX, 2d]
-            g1 = tf.concat(3, [fw_g0, bw_g0])
-            # (fw_g1, bw_g1), _ = bidirectional_dynamic_rnn(first_cell, first_cell, g0, x_len, dtype='float', scope='g1')  # [N, M, JX, 2d]
-            # g1 = tf.concat(3, [fw_g1, bw_g1])
-            # (fw_g1, bw_g1), _ = bidirectional_dynamic_rnn(first_cell, first_cell, g0, x_len, dtype='float', scope='g1')  # [N, M, JX, 2d]
-            # g1 = tf.concat(3, [fw_g1, bw_g1])
+            g0 = tf.concat(3, [fw_g0, bw_g0])
+            (fw_g1, bw_g1), _ = bidirectional_dynamic_rnn(first_cell, first_cell, g0, x_len, dtype='float', scope='g1')  # [N, M, JX, 2d]
+            g1 = tf.concat(3, [fw_g1, bw_g1])
+
+            (fw_g1, bw_g1), _ = bidirectional_dynamic_rnn(first_cell, first_cell, g1, x_len, dtype='float', scope='g1')  # [N, M, JX, 2d]
+            g1 = tf.concat(3, [fw_g1, bw_g1])
+            (fw_g1, bw_g1), _ = bidirectional_dynamic_rnn(first_cell, first_cell, g1, x_len, dtype='float', scope='g1')  # [N, M, JX, 2d]
+            g1 = tf.concat(3, [fw_g1, bw_g1])
 
             logits = get_logits([g1, p0], d, True, wd=config.wd, input_keep_prob=config.input_keep_prob,
                                 mask=self.x_mask, is_train=self.is_train, func=config.answer_func, scope='logits1')

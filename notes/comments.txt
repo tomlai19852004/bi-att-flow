@@ -23,3 +23,8 @@ test step 20000: accuracy=0.6401, f1=0.7483, loss=2.9517
 04 full training
 test step 20000: accuracy=0.6385, f1=0.7473, loss=3.0892
 {"exact_match": 66.90633869441817, "f1": 76.46341814292049}
+
+
+05 remove 1 bi-lstm layer from modelling layer
+test step 20000: accuracy=0.6324, f1=0.7416, loss=3.1524
+{"exact_match": 65.94134342478714, "f1": 75.90520423932426}
