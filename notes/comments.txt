@@ -1,2 +1,25 @@
 Initial result
 {"exact_match": 66.92526017029329, "f1": 76.71434654414833}
+tensorflow v0.12
+00
+{"f1": 76.71434654414833, "exact_match": 66.92526017029329}
+
+tensorflow v0.11
+01
+test step 20000: accuracy=0.6367, f1=0.7426, loss=3.1133
+{"f1": 75.9961508374296, "exact_match": 66.53736991485336}
+
+
+02
+test step 20000: accuracy=0.6402, f1=0.7508, loss=3.0318
+{"exact_match": 66.90633869441817, "f1": 76.75847836253988}
+
+
+03 without highway
+test step 20000: accuracy=0.6401, f1=0.7483, loss=2.9517
+{"exact_match": 66.6414380321665, "f1": 76.3479980167674}
+
+
+04 full training
+test step 20000: accuracy=0.6385, f1=0.7473, loss=3.0892
+{"exact_match": 66.90633869441817, "f1": 76.46341814292049}
