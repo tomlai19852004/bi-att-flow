@@ -162,7 +162,7 @@ class Model(object):
                 first_cell = d_cell
 
             (fw_g0, bw_g0), _ = bidirectional_dynamic_rnn(first_cell, first_cell, p0, x_len, dtype='float', scope='g0')  # [N, M, JX, 2d]
-            g0 = tf.concat(3, [fw_g0, bw_g0])
+            g1 = tf.concat(3, [fw_g0, bw_g0])
             # (fw_g1, bw_g1), _ = bidirectional_dynamic_rnn(first_cell, first_cell, g0, x_len, dtype='float', scope='g1')  # [N, M, JX, 2d]
             # g1 = tf.concat(3, [fw_g1, bw_g1])
             # (fw_g1, bw_g1), _ = bidirectional_dynamic_rnn(first_cell, first_cell, g0, x_len, dtype='float', scope='g1')  # [N, M, JX, 2d]
