@@ -28,3 +28,8 @@ test step 20000: accuracy=0.6385, f1=0.7473, loss=3.0892
 05 remove 1 bi-lstm layer from modelling layer
 test step 20000: accuracy=0.6324, f1=0.7416, loss=3.1524
 {"exact_match": 65.94134342478714, "f1": 75.90520423932426}
+
+
+06 add 2 bi-lstm to modelling layer
+test step 20000: accuracy=0.6300, f1=0.7436, loss=3.0828
+{"exact_match": 66.14001892147587, "f1": 76.05625712221408}
