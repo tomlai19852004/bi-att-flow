@@ -169,7 +169,7 @@ class Model(object):
             # (fw_g0_2, bw_g0_2), _ = bidirectional_dynamic_rnn(first_cell, first_cell, g0_1, x_len, dtype='float', scope='g0_2')  # [N, M, JX, 2d]
             # g0_2 = tf.concat(3, [fw_g0_2, bw_g0_2])
             
-            (fw_g1, bw_g1), _ = bidirectional_dynamic_rnn(first_cell, first_cell, g0_2, x_len, dtype='float', scope='g1')  # [N, M, JX, 2d]
+            (fw_g1, bw_g1), _ = bidirectional_dynamic_rnn(first_cell, first_cell, g0, x_len, dtype='float', scope='g1')  # [N, M, JX, 2d]
             g1 = tf.concat(3, [fw_g1, bw_g1])
 
             logits = get_logits([g1, p0], d, True, wd=config.wd, input_keep_prob=config.input_keep_prob,
