@@ -33,3 +33,8 @@ test step 20000: accuracy=0.6324, f1=0.7416, loss=3.1524
 06 add 2 bi-lstm to modelling layer
 test step 20000: accuracy=0.6300, f1=0.7436, loss=3.0828
 {"exact_match": 66.14001892147587, "f1": 76.05625712221408}
+
+
+07 remove word embedding layer
+test step 20000: accuracy=0.5358, f1=0.6579, loss=3.5274
+{"f1": 67.43934317054583, "exact_match": 56.08325449385052}

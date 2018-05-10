@@ -9,7 +9,7 @@ flags = tf.app.flags
 # Names and directories
 flags.DEFINE_string("model_name", "basic", "Model name [basic]")
 flags.DEFINE_string("data_dir", "data/squad", "Data dir [data/squad]")
-flags.DEFINE_string("run_id", "7", "Run ID [0]")
+flags.DEFINE_string("run_id", "8", "Run ID [0]")
 flags.DEFINE_string("out_base_dir", "out", "out base dir [out]")
 flags.DEFINE_string("forward_name", "single", "Forward name [single]")
 flags.DEFINE_string("answer_path", "", "Answer path []")
@@ -92,10 +92,10 @@ flags.DEFINE_string("sh_logit_func", "tri_linear", "sh logit func [tri_linear]")
 
 # Ablation options
 flags.DEFINE_bool("use_char_emb", True, "use char emb? [True]")
-flags.DEFINE_bool("use_word_emb", False, "use word embedding? [True]")
+flags.DEFINE_bool("use_word_emb", True, "use word embedding? [True]")
 flags.DEFINE_bool("q2c_att", True, "question-to-context attention? [True]")
 flags.DEFINE_bool("c2q_att", True, "context-to-question attention? [True]")
-flags.DEFINE_bool("dynamic_att", False, "Dynamic attention [False]")
+flags.DEFINE_bool("dynamic_att", True, "Dynamic attention [False]")
 
 
 def main(_):
