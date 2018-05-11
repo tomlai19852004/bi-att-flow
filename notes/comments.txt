@@ -38,3 +38,8 @@ test step 20000: accuracy=0.6300, f1=0.7436, loss=3.0828
 07 remove word embedding layer
 test step 20000: accuracy=0.5358, f1=0.6579, loss=3.5274
 {"f1": 67.43934317054583, "exact_match": 56.08325449385052}
+
+
+08 use dynamic attention
+test step 20000: accuracy=0.5996, f1=0.7092, loss=3.1379
+{"exact_match": 62.81929990539262, "f1": 72.86757665882361}
