@@ -83,3 +83,14 @@ test step 20000: accuracy=0.6032, f1=0.7116, loss=3.1942
 
 16 dynamic attention
 test step 20000: accuracy=0.6095, f1=0.7208, loss=3.1338
+{"exact_match": 63.76537369914853, "f1": 73.84847456742293}
+
+
+17 dynamic attention
+
+
+
+
+18 dynamic attention
+test step 20000: accuracy=0.6066, f1=0.7146, loss=3.1387
+{"exact_match": 63.36802270577105, "f1": 73.52253275561748}
