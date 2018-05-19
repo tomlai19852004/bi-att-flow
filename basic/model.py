@@ -129,6 +129,8 @@ class Model(object):
                 tf.get_variable_scope().reuse_variables()
                 qq = highway_network(qq, config.highway_num_layers, True, wd=config.wd, is_train=self.is_train)
 
+        xx = tf.reshape(xx, [-1, JX, W, dc])
+
         self.tensor_dict['xx'] = xx
         self.tensor_dict['qq'] = qq
 
@@ -136,32 +138,32 @@ class Model(object):
         print(xx.get_shape())
         print(qq.get_shape())
 
-        # CONTEXTUAL EMBED LAYER
-        cell = BasicLSTMCell(d, state_is_tuple=True)
-        d_cell = SwitchableDropoutWrapper(cell, self.is_train, input_keep_prob=config.input_keep_prob)
-        x_len = tf.reduce_sum(tf.cast(self.x_mask, 'int32'), 2)  # [N, M]
-        q_len = tf.reduce_sum(tf.cast(self.q_mask, 'int32'), 1)  # [N]
+        # # CONTEXTUAL EMBED LAYER
+        # cell = BasicLSTMCell(d, state_is_tuple=True)
+        # d_cell = SwitchableDropoutWrapper(cell, self.is_train, input_keep_prob=config.input_keep_prob)
+        # x_len = tf.reduce_sum(tf.cast(self.x_mask, 'int32'), 2)  # [N, M]
+        # q_len = tf.reduce_sum(tf.cast(self.q_mask, 'int32'), 1)  # [N]
 
-        with tf.variable_scope("prepro"):
-            (fw_u, bw_u), ((_, fw_u_f), (_, bw_u_f)) = bidirectional_dynamic_rnn(d_cell, d_cell, qq, q_len, dtype='float', scope='u1')  # [N, J, d], [N, d]
-            u = tf.concat(2, [fw_u, bw_u])
-            if config.share_lstm_weights:
-                tf.get_variable_scope().reuse_variables()
-                (fw_h, bw_h), _ = bidirectional_dynamic_rnn(cell, cell, xx, x_len, dtype='float', scope='u1')  # [N, M, JX, 2d]
-                h = tf.concat(3, [fw_h, bw_h])  # [N, M, JX, 2d]
-            else:
-                (fw_h, bw_h), _ = bidirectional_dynamic_rnn(cell, cell, xx, x_len, dtype='float', scope='h1')  # [N, M, JX, 2d]
-                h = tf.concat(3, [fw_h, bw_h])  # [N, M, JX, 2d]
-            self.tensor_dict['u'] = u
-            self.tensor_dict['h'] = h
-        # CONTEXTUAL EMBED LAYER END
+        # with tf.variable_scope("prepro"):
+        #     (fw_u, bw_u), ((_, fw_u_f), (_, bw_u_f)) = bidirectional_dynamic_rnn(d_cell, d_cell, qq, q_len, dtype='float', scope='u1')  # [N, J, d], [N, d]
+        #     u = tf.concat(2, [fw_u, bw_u])
+        #     if config.share_lstm_weights:
+        #         tf.get_variable_scope().reuse_variables()
+        #         (fw_h, bw_h), _ = bidirectional_dynamic_rnn(cell, cell, xx, x_len, dtype='float', scope='u1')  # [N, M, JX, 2d]
+        #         h = tf.concat(3, [fw_h, bw_h])  # [N, M, JX, 2d]
+        #     else:
+        #         (fw_h, bw_h), _ = bidirectional_dynamic_rnn(cell, cell, xx, x_len, dtype='float', scope='h1')  # [N, M, JX, 2d]
+        #         h = tf.concat(3, [fw_h, bw_h])  # [N, M, JX, 2d]
+        #     self.tensor_dict['u'] = u
+        #     self.tensor_dict['h'] = h
+        # # CONTEXTUAL EMBED LAYER END
 
-        # filter_sizes = list(map(int, config.out_channel_dims.split(',')))
-        # heights = list(map(int, config.filter_heights.split(',')))            
-        # u = multi_conv1d(xx, filter_sizes, heights, "VALID", self.is_train, config.keep_prob, scope="u1")
-        # h = multi_conv1d(qq, filter_sizes, heights, "VALID", self.is_train, config.keep_prob, scope="h1")
-        # self.tensor_dict['u'] = u
-        # self.tensor_dict['h'] = h
+        filter_sizes = list(map(int, config.out_channel_dims.split(',')))
+        heights = list(map(int, config.filter_heights.split(',')))            
+        u = multi_conv1d(xx, filter_sizes, heights, "VALID", self.is_train, config.keep_prob, scope="u1")
+        h = multi_conv1d(qq, filter_sizes, heights, "VALID", self.is_train, config.keep_prob, scope="h1")
+        self.tensor_dict['u'] = u
+        self.tensor_dict['h'] = h
 
         with tf.variable_scope("main"):
             if config.dynamic_att:
@@ -172,27 +174,37 @@ class Model(object):
                                            input_keep_prob=self.config.input_keep_prob, is_train=self.is_train)
             else:
                 p0 = attention_layer(config, self.is_train, h, u, h_mask=self.x_mask, u_mask=self.q_mask, scope="p0", tensor_dict=self.tensor_dict)
-                first_cell = d_cell
+                # first_cell = d_cell
 
-            (fw_g0, bw_g0), _ = bidirectional_dynamic_rnn(first_cell, first_cell, p0, x_len, dtype='float', scope='g0')  # [N, M, JX, 2d]
-            g0 = tf.concat(3, [fw_g0, bw_g0])
+            # (fw_g0, bw_g0), _ = bidirectional_dynamic_rnn(first_cell, first_cell, p0, x_len, dtype='float', scope='g0')  # [N, M, JX, 2d]
+            # g0 = tf.concat(3, [fw_g0, bw_g0])
             
-            # (fw_g0_1, bw_g0_1), _ = bidirectional_dynamic_rnn(first_cell, first_cell, g0, x_len, dtype='float', scope='g0_1')  # [N, M, JX, 2d]
-            # g0_1 = tf.concat(3, [fw_g0_1, bw_g0_1])
-            # (fw_g0_2, bw_g0_2), _ = bidirectional_dynamic_rnn(first_cell, first_cell, g0_1, x_len, dtype='float', scope='g0_2')  # [N, M, JX, 2d]
-            # g0_2 = tf.concat(3, [fw_g0_2, bw_g0_2])
+            # # (fw_g0_1, bw_g0_1), _ = bidirectional_dynamic_rnn(first_cell, first_cell, g0, x_len, dtype='float', scope='g0_1')  # [N, M, JX, 2d]
+            # # g0_1 = tf.concat(3, [fw_g0_1, bw_g0_1])
+            # # (fw_g0_2, bw_g0_2), _ = bidirectional_dynamic_rnn(first_cell, first_cell, g0_1, x_len, dtype='float', scope='g0_2')  # [N, M, JX, 2d]
+            # # g0_2 = tf.concat(3, [fw_g0_2, bw_g0_2])
             
-            (fw_g1, bw_g1), _ = bidirectional_dynamic_rnn(first_cell, first_cell, g0, x_len, dtype='float', scope='g1')  # [N, M, JX, 2d]
-            g1 = tf.concat(3, [fw_g1, bw_g1])
+            # (fw_g1, bw_g1), _ = bidirectional_dynamic_rnn(first_cell, first_cell, g0, x_len, dtype='float', scope='g1')  # [N, M, JX, 2d]
+            # g1 = tf.concat(3, [fw_g1, bw_g1])
+
+
+            filter_sizes = list(map(int, config.out_channel_dims.split(',')))
+            heights = list(map(int, config.filter_heights.split(',')))            
+            g1 = multi_conv1d(p0, filter_sizes, heights, "VALID", self.is_train, config.keep_prob, scope="u1")
+            
+            
 
             logits = get_logits([g1, p0], d, True, wd=config.wd, input_keep_prob=config.input_keep_prob,
                                 mask=self.x_mask, is_train=self.is_train, func=config.answer_func, scope='logits1')
             a1i = softsel(tf.reshape(g1, [N, M * JX, 2 * d]), tf.reshape(logits, [N, M * JX]))
             a1i = tf.tile(tf.expand_dims(tf.expand_dims(a1i, 1), 1), [1, M, JX, 1])
 
-            (fw_g2, bw_g2), _ = bidirectional_dynamic_rnn(d_cell, d_cell, tf.concat(3, [p0, g1, a1i, g1 * a1i]),
-                                                          x_len, dtype='float', scope='g2')  # [N, M, JX, 2d]
-            g2 = tf.concat(3, [fw_g2, bw_g2])
+            # (fw_g2, bw_g2), _ = bidirectional_dynamic_rnn(d_cell, d_cell, tf.concat(3, [p0, g1, a1i, g1 * a1i]),
+            #                                               x_len, dtype='float', scope='g2')  # [N, M, JX, 2d]
+            # g2 = tf.concat(3, [fw_g2, bw_g2])
+            
+            g2 = multi_conv1d(tf.concat(3, [p0, g1, a1i, g1 * a1i]), filter_sizes, heights, "VALID", self.is_train, config.keep_prob, scope="h1")
+            
             logits2 = get_logits([g2, p0], d, True, wd=config.wd, input_keep_prob=config.input_keep_prob,
                                  mask=self.x_mask,
                                  is_train=self.is_train, func=config.answer_func, scope='logits2')
