@@ -132,32 +132,36 @@ class Model(object):
         self.tensor_dict['xx'] = xx
         self.tensor_dict['qq'] = qq
 
-        # # CONTEXTUAL EMBED LAYER
-        # cell = BasicLSTMCell(d, state_is_tuple=True)
-        # d_cell = SwitchableDropoutWrapper(cell, self.is_train, input_keep_prob=config.input_keep_prob)
-        # x_len = tf.reduce_sum(tf.cast(self.x_mask, 'int32'), 2)  # [N, M]
-        # q_len = tf.reduce_sum(tf.cast(self.q_mask, 'int32'), 1)  # [N]
+        print("Debug tensor shape after highway network")
+        print(xx.get_shape())
+        print(qq.get_shape())
 
-        # with tf.variable_scope("prepro"):
-        #     (fw_u, bw_u), ((_, fw_u_f), (_, bw_u_f)) = bidirectional_dynamic_rnn(d_cell, d_cell, qq, q_len, dtype='float', scope='u1')  # [N, J, d], [N, d]
-        #     u = tf.concat(2, [fw_u, bw_u])
-        #     if config.share_lstm_weights:
-        #         tf.get_variable_scope().reuse_variables()
-        #         (fw_h, bw_h), _ = bidirectional_dynamic_rnn(cell, cell, xx, x_len, dtype='float', scope='u1')  # [N, M, JX, 2d]
-        #         h = tf.concat(3, [fw_h, bw_h])  # [N, M, JX, 2d]
-        #     else:
-        #         (fw_h, bw_h), _ = bidirectional_dynamic_rnn(cell, cell, xx, x_len, dtype='float', scope='h1')  # [N, M, JX, 2d]
-        #         h = tf.concat(3, [fw_h, bw_h])  # [N, M, JX, 2d]
-        #     self.tensor_dict['u'] = u
-        #     self.tensor_dict['h'] = h
-        # # CONTEXTUAL EMBED LAYER END
+        # CONTEXTUAL EMBED LAYER
+        cell = BasicLSTMCell(d, state_is_tuple=True)
+        d_cell = SwitchableDropoutWrapper(cell, self.is_train, input_keep_prob=config.input_keep_prob)
+        x_len = tf.reduce_sum(tf.cast(self.x_mask, 'int32'), 2)  # [N, M]
+        q_len = tf.reduce_sum(tf.cast(self.q_mask, 'int32'), 1)  # [N]
 
-        filter_sizes = list(map(int, config.out_channel_dims.split(',')))
-        heights = list(map(int, config.filter_heights.split(',')))            
-        u = multi_conv1d(xx, filter_sizes, heights, "VALID", self.is_train, config.keep_prob, scope="u1")
-        h = multi_conv1d(qq, filter_sizes, heights, "VALID", self.is_train, config.keep_prob, scope="h1")
-        self.tensor_dict['u'] = u
-        self.tensor_dict['h'] = h
+        with tf.variable_scope("prepro"):
+            (fw_u, bw_u), ((_, fw_u_f), (_, bw_u_f)) = bidirectional_dynamic_rnn(d_cell, d_cell, qq, q_len, dtype='float', scope='u1')  # [N, J, d], [N, d]
+            u = tf.concat(2, [fw_u, bw_u])
+            if config.share_lstm_weights:
+                tf.get_variable_scope().reuse_variables()
+                (fw_h, bw_h), _ = bidirectional_dynamic_rnn(cell, cell, xx, x_len, dtype='float', scope='u1')  # [N, M, JX, 2d]
+                h = tf.concat(3, [fw_h, bw_h])  # [N, M, JX, 2d]
+            else:
+                (fw_h, bw_h), _ = bidirectional_dynamic_rnn(cell, cell, xx, x_len, dtype='float', scope='h1')  # [N, M, JX, 2d]
+                h = tf.concat(3, [fw_h, bw_h])  # [N, M, JX, 2d]
+            self.tensor_dict['u'] = u
+            self.tensor_dict['h'] = h
+        # CONTEXTUAL EMBED LAYER END
+
+        # filter_sizes = list(map(int, config.out_channel_dims.split(',')))
+        # heights = list(map(int, config.filter_heights.split(',')))            
+        # u = multi_conv1d(xx, filter_sizes, heights, "VALID", self.is_train, config.keep_prob, scope="u1")
+        # h = multi_conv1d(qq, filter_sizes, heights, "VALID", self.is_train, config.keep_prob, scope="h1")
+        # self.tensor_dict['u'] = u
+        # self.tensor_dict['h'] = h
 
         with tf.variable_scope("main"):
             if config.dynamic_att:
