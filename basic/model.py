@@ -129,7 +129,8 @@ class Model(object):
                 tf.get_variable_scope().reuse_variables()
                 qq = highway_network(qq, config.highway_num_layers, True, wd=config.wd, is_train=self.is_train)
 
-        xx = tf.reshape(xx, [-1, JX, W, dc])
+        # xx = tf.reshape(xx, [-1, JX, W, dc])
+
 
         self.tensor_dict['xx'] = xx
         self.tensor_dict['qq'] = qq
