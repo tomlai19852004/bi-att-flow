@@ -198,6 +198,9 @@ class Model(object):
             heights = list(map(int, config.filter_heights.split(',')))            
             g1 = multi_conv1d(p0, filter_sizes, heights, "VALID", self.is_train, config.keep_prob, scope="u1")
             
+            print("debug attention.")
+            print(p0.get_shape())
+            print(g1.get_shape())
             
 
             logits = get_logits([g1, p0], d, True, wd=config.wd, input_keep_prob=config.input_keep_prob,
