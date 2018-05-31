@@ -198,17 +198,17 @@ class Model(object):
             heights = list(map(int, config.filter_heights.split(',')))            
             g1 = multi_conv1d(p0, filter_sizes, heights, "VALID", self.is_train, config.keep_prob, scope="u1")
             
-            print("debug attention.")
-            print(p0.get_shape())
-            print(g1.get_shape())
-            print(a1i.get_shape())
-            
 
             logits = get_logits([g1, p0], d, True, wd=config.wd, input_keep_prob=config.input_keep_prob,
                                 mask=self.x_mask, is_train=self.is_train, func=config.answer_func, scope='logits1')
             a1i = softsel(tf.reshape(g1, [N, M * JX, 2 * d]), tf.reshape(logits, [N, M * JX]))
             a1i = tf.tile(tf.expand_dims(tf.expand_dims(a1i, 1), 1), [1, M, JX, 1])
 
+            print("debug attention.")
+            print(p0.get_shape())
+            print(g1.get_shape())
+            print(a1i.get_shape())
+            
             # (fw_g2, bw_g2), _ = bidirectional_dynamic_rnn(d_cell, d_cell, tf.concat(3, [p0, g1, a1i, g1 * a1i]),
             #                                               x_len, dtype='float', scope='g2')  # [N, M, JX, 2d]
             # g2 = tf.concat(3, [fw_g2, bw_g2])
