@@ -201,7 +201,7 @@ class Model(object):
             print("debug attention.")
             print(p0.get_shape())
             print(g1.get_shape())
-            print(ali.get_shape())
+            print(a1i.get_shape())
             
 
             logits = get_logits([g1, p0], d, True, wd=config.wd, input_keep_prob=config.input_keep_prob,
