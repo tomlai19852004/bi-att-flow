@@ -194,7 +194,7 @@ class Model(object):
             # g1 = tf.concat(3, [fw_g1, bw_g1])
 
 
-            filter_sizes = list(map(int, config.out_channel_dims.split(',')))
+            filter_sizes = list(map(int, config.attention_cnn_out_dims.split(',')))
             heights = list(map(int, config.filter_heights.split(',')))            
             g1 = multi_conv1d(p0, filter_sizes, heights, "VALID", self.is_train, config.keep_prob, scope="u1")
             
