@@ -199,7 +199,7 @@ class Model(object):
 
             filter_sizes = list(map(int, config.attention_cnn_out_dims.split(',')))
             heights = list(map(int, config.filter_heights.split(',')))            
-            g1 = multi_conv1d(first_cell, filter_sizes, heights, "VALID", self.is_train, config.keep_prob, scope="u1")
+            g1 = multi_conv1d(p0, filter_sizes, heights, "VALID", self.is_train, config.keep_prob, scope="u1")
             
 
             logits = get_logits([g1, first_cell], d, True, wd=config.wd, input_keep_prob=config.input_keep_prob,
