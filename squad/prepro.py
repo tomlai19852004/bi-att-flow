@@ -26,7 +26,8 @@ def get_args():
     parser.add_argument('-t', "--target_dir", default=target_dir)
     parser.add_argument("--train_name", default='train-v1.1.json')
     parser.add_argument('-d', "--debug", action='store_true')
-    parser.add_argument("--train_ratio", default=0.9, type=int)
+    parser.add_argument("--train_ratio", default=0.1, type=int)
+    parser.add_argument("--data_use_ratio", default=0.2, type=int)
     parser.add_argument("--glove_corpus", default="6B")
     parser.add_argument("--glove_dir", default=glove_dir)
     parser.add_argument("--glove_vec_size", default=100, type=int)
@@ -72,7 +73,7 @@ def prepro(args):
         prepro_each(args, "NULL", out_name="single", in_path=args.single_path)
     else:
         prepro_each(args, 'train', 0.0, args.train_ratio, out_name='train')
-        prepro_each(args, 'train', args.train_ratio, 1.0, out_name='dev')
+        prepro_each(args, 'train', args.train_ratio, args.data_use_ratio, out_name='dev')
         prepro_each(args, 'dev', out_name='test')
 
 

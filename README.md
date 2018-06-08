@@ -6,6 +6,14 @@
 - For TensorFlow v1.2 compatible version, see the [dev][dev] branch.
 - Please contact [Minjoon Seo][minjoon] ([@seominjoon][minjoon-github]) for questions and suggestions.
 
+
+# Tensorflow version
+v1.1.0
+Detailed documentation should refer to the following repository
+https://github.com/tensorflow/tensorflow/tree/v1.1.0
+
+
+
 ## 0. Requirements
 #### General
 - Python (verified on 3.5.2. Issues have been reported with Python 2!)
