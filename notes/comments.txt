@@ -1,97 +1,17 @@
 Initial result
 {"exact_match": 66.92526017029329, "f1": 76.71434654414833}
-tensorflow v0.12
-00
-{"f1": 76.71434654414833, "exact_match": 66.92526017029329}
-
-tensorflow v0.11
-01
-test step 20000: accuracy=0.6367, f1=0.7426, loss=3.1133
-{"f1": 75.9961508374296, "exact_match": 66.53736991485336}
-
-
-02
-test step 20000: accuracy=0.6402, f1=0.7508, loss=3.0318
-{"exact_match": 66.90633869441817, "f1": 76.75847836253988}
-
-
-03 without highway
-test step 20000: accuracy=0.6401, f1=0.7483, loss=2.9517
-{"exact_match": 66.6414380321665, "f1": 76.3479980167674}
-
-
-04 full training
-test step 20000: accuracy=0.6385, f1=0.7473, loss=3.0892
-{"exact_match": 66.90633869441817, "f1": 76.46341814292049}
-
-
-05 remove 1 bi-lstm layer from modelling layer
-test step 20000: accuracy=0.6324, f1=0.7416, loss=3.1524
-{"exact_match": 65.94134342478714, "f1": 75.90520423932426}
-
-
-06 add 2 bi-lstm to modelling layer
-test step 20000: accuracy=0.6300, f1=0.7436, loss=3.0828
-{"exact_match": 66.14001892147587, "f1": 76.05625712221408}
-
-
-07 remove word embedding layer
-test step 20000: accuracy=0.5358, f1=0.6579, loss=3.5274
-{"f1": 67.43934317054583, "exact_match": 56.08325449385052}
-
-
-08 use dynamic attention
-test step 20000: accuracy=0.5996, f1=0.7092, loss=3.1379
-{"exact_match": 62.81929990539262, "f1": 72.86757665882361}
-
-
-09 dynamic attention
-test step 20000: accuracy=0.6093, f1=0.7164, loss=3.1449
-{"exact_match": 63.76537369914853, "f1": 73.60893819572162}
-
-
-10 dynamic attention
-test step 20000: accuracy=0.6144, f1=0.7214, loss=3.0940
-{"exact_match": 64.20056764427625, "f1": 73.98918569190054}
-
-
-11 dynamic attention
-test step 20000: accuracy=0.6130, f1=0.7182, loss=3.1426
-{"f1": 73.73293971859735, "exact_match": 63.964049195837276}
-
-
-12 dynamic attention
-test step 20000: accuracy=0.6037, f1=0.7099, loss=3.1762
-{"exact_match": 63.09366130558183, "f1": 72.95416347307582}
 
 
 
-13 dynamic attention
-test step 20000: accuracy=0.6100, f1=0.7161, loss=3.1268
-{"f1": 73.50312237364489, "exact_match": 63.94512771996216}
+basic/cli - set all tensorflow runtime parameter
+basic/model - Overall model
+line 98 - 106: character level CNN
+line 117 - 121: word embedding using pre-train word vector
+line 158 - 169: contextual embedding layer
+line 172 - 189: Attention Flow layer
 
 
-14 dynamic attention
-test step 20000: accuracy=0.6114, f1=0.7182, loss=3.1143
-{"exact_match": 63.888363292336805, "f1": 73.69223671072145}
+my folder - customer tensorflow module for the purpose of this model
 
-
-15 dynamic attention
-test step 20000: accuracy=0.6032, f1=0.7116, loss=3.1942
-{"exact_match": 63.140964995269634, "f1": 73.1756137078988}
-
-
-16 dynamic attention
-test step 20000: accuracy=0.6095, f1=0.7208, loss=3.1338
-{"exact_match": 63.76537369914853, "f1": 73.84847456742293}
-
-
-17 dynamic attention
-test step 20000: accuracy=0.6109, f1=0.7153, loss=3.1274
-{"f1": 73.52093821834863, "exact_match": 63.964049195837276}
-
-
-
-18 dynamic attention
-test step 20000: accuracy=0.6066, f1=0.7146, loss=3.1387
-{"exact_match": 63.36802270577105, "f1": 73.52253275561748}
+Parameter:
+cluster - cluster different examples by their length
