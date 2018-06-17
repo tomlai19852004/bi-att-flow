@@ -9,7 +9,7 @@ import numpy as np
 
 from my.tensorflow import grouper
 from my.utils import index
-from IPython import embed
+#from IPython import embed
 
 class Data(object):
     def get_size(self):
