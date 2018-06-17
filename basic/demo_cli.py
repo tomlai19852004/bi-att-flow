@@ -8,7 +8,7 @@ from pprint import pprint
 import tensorflow as tf
 from tqdm import tqdm
 import numpy as np
-from IPython import embed
+#from IPython import embed
 from basic.evaluator import F1Evaluator, Evaluator, ForwardEvaluator, MultiGPUF1Evaluator
 from basic.graph_handler import GraphHandler
 from basic.model import Model, get_multi_gpu_models

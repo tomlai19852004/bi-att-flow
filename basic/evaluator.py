@@ -1,6 +1,6 @@
 import numpy as np
 import tensorflow as tf
-from IPython import embed
+#from IPython import embed
 from basic.read_data import DataSet
 from my.nltk_utils import span_f1
 from my.tensorflow import padded_reshape
