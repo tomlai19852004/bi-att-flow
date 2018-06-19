@@ -71,6 +71,8 @@ def submit1():
     all_result = [d for d in document_cursor]
     print(all_result)
     documents = [d['context'] for d in document_cursor]
+    if len(documents):
+        paragraph = documents[0]['context']
     # print(documents)
     # matched = requests.post(
     #     paraphrase_url + "/msg-similarity-debug",
