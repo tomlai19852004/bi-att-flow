@@ -53,6 +53,13 @@ def submit1():
     req = request.json
     paragraph = req.get('paragraph')
     question = req.get('question')
+
+    print("Debug paragraph")
+    print(paragraph)
+
+    print("\n\nDebug question")
+    print(question)
+
     answer = getAnswer(paragraph, question)
     return jsonify(result=answer)
 
