@@ -1,0 +1,12 @@
+version: "3.3"
+services:
+  bidir:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - $HOST_PORT:$LISTEN_PORT
+    environment:
+      MONGO_URL: $MONGO_URL
+      PARAPHRASE_BASE_URL: $PARAPHRASE_BASE_URL
+      
