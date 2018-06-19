@@ -68,28 +68,30 @@ def submit1():
     collection = db['KnowledgeBase']
 
     document_cursor = collection.find({ "$text": { "$search": question } }, { "score": { "$meta": "textScore" } }).sort( [('score', {'$meta':'textScore'})] )
+    all_result = [d for d in document_cursor]
+    print(all_result)
     documents = [d['context'] for d in document_cursor]
-    print(documents)
-    matched = requests.post(
-        paraphrase_url + "/msg-similarity-debug",
-        data= json.dumps({
-            "msg": question,
-            "msgs": documents
-        }),
-        headers={"Content-Type": "application/json"}
-    )
+    # print(documents)
+    # matched = requests.post(
+    #     paraphrase_url + "/msg-similarity-debug",
+    #     data= json.dumps({
+    #         "msg": question,
+    #         "msgs": documents
+    #     }),
+    #     headers={"Content-Type": "application/json"}
+    # )
 
-    if matched.status_code == 200:
-        similar_result = matched.json()
+    # if matched.status_code == 200:
+    #     similar_result = matched.json()
         
-        print(similar_result)
-        if len(similar_result):
-            paragraph = similar_result[0]['msg']
-            print("Show paragraph")
-            print(paragraph)
-        else:
-            print("empty")
-            print(similar_result)
+    #     print(similar_result)
+    #     if len(similar_result):
+    #         paragraph = similar_result[0]['msg']
+    #         print("Show paragraph")
+    #         print(paragraph)
+    #     else:
+    #         print("empty")
+    #         print(similar_result)
     if paragraph.strip():
         answer = getAnswer(paragraph, question)
     else:
