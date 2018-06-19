@@ -67,7 +67,7 @@ def submit1():
     db = pymongo.MongoClient(mongo_url)['demo']
     collection = db['KnowledgeBase']
 
-    document_cursor = collection.find({})
+    document_cursor = collection.find({ "$text": { "$search": self.original_message } }, { "score": { "$meta": "textScore" } }).sort( [('score', {'$meta':'textScore'})] )
     documents = [d['context'] for d in document_cursor]
     print(documents)
     matched = requests.post(
