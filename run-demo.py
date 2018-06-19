@@ -59,6 +59,8 @@ def submit():
 def submit1():
     req = request.json
     paragraph = req.get('paragraph')
+    if not paragraph:
+        paragraph = ""
     question = req.get('question')
 
     db = pymongo.MongoClient(mongo_url)['demo']
@@ -86,9 +88,11 @@ def submit1():
         else:
             print("empty")
             print(similar_result)
-
-    answer = getAnswer(paragraph, question)
-    return jsonify(result=answer)
+    if paragraph.strip():
+        answer = getAnswer(paragraph, question)
+    else:
+        answer = ""
+    return jsonify(result=answer, paragraph=paragraph)
 
 
 if __name__ == "__main__":
