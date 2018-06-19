@@ -69,9 +69,9 @@ def submit1():
 
     document_cursor = collection.find({ "$text": { "$search": question } }, { "score": { "$meta": "textScore" } }).sort( [('score', {'$meta':'textScore'})] )
     documents = [d['context'] for d in document_cursor]
-
+    print(documents)
     matched = requests.post(
-        paraphrase_url + "/msg-similarity",
+        paraphrase_url + "/msg-similarity-debug",
         data= json.dumps({
             "msg": question,
             "msgs": documents
@@ -81,7 +81,8 @@ def submit1():
 
     if matched.status_code == 200:
         similar_result = matched.json()
-
+        
+        print(similar_result)
         if len(similar_result):
             paragraph = similar_result[0]['msg']
             print("Show paragraph")
