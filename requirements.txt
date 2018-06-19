@@ -1,4 +1,5 @@
-tensorflow>=0.11
+tensorflow==0.11
 nltk
 tqdm
 jinja2
+Flask==0.10.1
