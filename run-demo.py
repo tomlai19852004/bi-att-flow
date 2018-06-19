@@ -71,9 +71,9 @@ def submit1():
         paraphrase_url + "/msg-similarity",
         data= json.dumps({
             "msg": question,
-            "msgs": documents,
-            "headers":{"Content-Type": "application/json"}
-        })
+            "msgs": documents
+        }),
+        headers={"Content-Type": "application/json"}
     )
 
     print(matched[0])
