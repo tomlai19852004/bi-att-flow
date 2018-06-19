@@ -5,8 +5,9 @@ import json
 import pymongo
 import requests
 import os
+from pathlib import Path
 from dotenv import load_dotenv, find_dotenv
-
+load_dotenv(dotenv_path=Path('.'))
 mongo_url = os.environ['MONGO_URL']
 paraphrase_url = os.environ['PARAPHRASE_BASE_URL']
 
