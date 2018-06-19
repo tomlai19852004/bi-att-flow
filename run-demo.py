@@ -68,8 +68,8 @@ def submit1():
     collection = db['KnowledgeBase']
 
     document_cursor = collection.find({ "$text": { "$search": question } }, { "score": { "$meta": "textScore" } }).sort( [('score', {'$meta':'textScore'})] )
-    all_result = [d for d in document_cursor]
-    print(all_result)
+    # all_result = [d for d in document_cursor]
+    # print(all_result)
     documents = [d['context'] for d in document_cursor]
     print(documents)
     if len(documents):
