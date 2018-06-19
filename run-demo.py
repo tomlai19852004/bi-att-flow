@@ -76,7 +76,11 @@ def submit1():
         headers={"Content-Type": "application/json"}
     )
 
-    print(matched[0])
+    if matched.status_code == 200:
+        similar_result = matched.json()
+        paragraph = similar_result[0]['msg']
+        print("Show paragraph")
+        print(paragraph)
 
     answer = getAnswer(paragraph, question)
     return jsonify(result=answer)
