@@ -2,6 +2,13 @@ from flask import Flask, render_template, redirect, request, jsonify
 from squad.demo_prepro import prepro
 from basic.demo_cli import Demo
 import json
+import pymongo
+import requests
+import os
+from dotenv import load_dotenv, find_dotenv
+
+mongo_url = os.environ['MONGO_URL']
+paraphrase_url = os.environ['PARAPHRASE_BASE_URL']
 
 app = Flask(__name__)
 shared = json.load(open("data/squad/shared_test.json", "r"))
@@ -53,6 +60,23 @@ def submit1():
     req = request.json
     paragraph = req.get('paragraph')
     question = req.get('question')
+
+    db = pymongo.MongoClient(mongo_url)['demo']
+    collection = db['KnowledgeBase']
+
+    document_cursor = collection.find({})
+    documents = [d['context'] for d in document_cursor]
+
+    matched = requests.post(
+        paraphrase_url + "/msg-similarity",
+        data= json.dumps({
+            "msg": question,
+            "msgs": documents,
+            "headers":{"Content-Type": "application/json"}
+        })
+    )
+
+    print(matched[0])
 
     answer = getAnswer(paragraph, question)
     return jsonify(result=answer)
